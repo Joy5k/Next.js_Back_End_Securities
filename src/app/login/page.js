@@ -4,6 +4,7 @@ import { useState } from 'react';
 const Page = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [Token,setToken]=useState('')
   console.log(email,'the email');
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -24,17 +25,22 @@ const Page = () => {
       });
 
       if (res.ok) {
-      const json = await res.json();
+        const json = await res.json();
+        console.log(json.Token,'the token');
+        setToken(json.Token)
+       
         const response = await fetch(`/api/email?email=${email}`, {
-      method:"GET"
+          method: "POST",
+          headers:{Token: JSON.stringify(Token)}
     })
     const result= await response.json()
-        console.log(result,'the result');
-      } else {
+        console.log(result,'---------------the result------------');
+      }
+      else {
         console.error('Failed to fetch data');
       }
     } catch (error) {
-      console.error('Error:', error);
+      console.log('Error:', error);
     }
   };
 

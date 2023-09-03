@@ -1,8 +1,19 @@
-import { jwtVerify } from "jose";
-import { NextResponse } from "next/server";
+
+import { NextResponse } from "next/server"
+import { SignJWT, jwtVerify } from "jose"
 
 export async function middleware(req, res, next) {
   if (req.nextUrl.pathname.startsWith('/api/Token')) {
+    // const key = new TextEncoder().encode(process.env.JWT_SECRET)
+    // const payload = { email: 'mmehedihasanjoyve@gmail.com', user_id: 'Abc123' }
+    // const token = await new SignJWT(payload)
+    //     .setProtectedHeader({ alg:'HS256'})
+    //     .setIssuedAt()
+    //     .setIssuer('http://localhost:3000')
+    //     .setExpirationTime('24h')
+    //     .sign(key)
+    // const reqHeaders = req.headers;
+    // const setHeaders = await reqHeaders.set('Token', token)
     console.log('going to create token');
 return NextResponse.next()
   }
