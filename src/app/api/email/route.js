@@ -4,7 +4,7 @@ import nodemailer from 'nodemailer'
 export async function GET(req, res, next) { 
     const { searchParams } = new URL(req.url);
     let ToEmail = searchParams.get('email')
-    
+console.log(ToEmail,'from backend');
    
 const Transporter = nodemailer.createTransport({
     host: "mail.teamrabbil.com",
@@ -27,7 +27,7 @@ const Transporter = nodemailer.createTransport({
         await     Transporter.sendMail(myEmail)
       return  NextResponse.json({message:'Success'})
     } catch (e) {
-        return  NextResponse.json({message:'Faild',})
+        return  NextResponse.json({message:'Fail',})
 
     }
 
