@@ -5,7 +5,6 @@ const Page = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [Token,setToken]=useState('')
-  console.log(email,'the email');
   const handleLogin = async (event) => {
     event.preventDefault();
 
@@ -21,20 +20,22 @@ const Page = () => {
         body: JSON.stringify(data),
         headers: {
           'Content-Type': 'application/json',
+          'email':email
         },
       });
 
       if (res.ok) {
         const json = await res.json();
-        console.log(json.Token,'the token');
+        console.log(json,'the token');
         setToken(json.Token)
-       
+        document.cookie = 'Token =' +json.Token;
         const response = await fetch(`/api/email?email=${email}`, {
           method: "POST",
+          //secret Token setting in the headers 
           headers:{Token: JSON.stringify(Token)}
     })
     const result= await response.json()
-        console.log(result,'---------------the result------------');
+        console.log(result,'--the result--from the login.page');
       }
       else {
         console.error('Failed to fetch data');
