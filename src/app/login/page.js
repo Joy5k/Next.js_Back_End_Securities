@@ -30,7 +30,7 @@ const Page = () => {
       if (res.ok) {
         const json = await res.json();
         setToken(json.Token)
-        document.cookie = 'Token =' + json.Token;
+        document.cookie ='Token='+ json.Token;
         const response = await fetch(`/api/email?email=${email}`, {
           method: "POST",
           //secret Token setting in the headers 
@@ -38,7 +38,7 @@ const Page = () => {
     })
     const result= await response.json()
         console.log(result, '--the result--from the login.page');
-        
+
         if (result.message === 'Success') {
           setLoading(false)
               router.replace('/protectedRoute')

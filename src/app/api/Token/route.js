@@ -12,7 +12,7 @@ export async function POST(req, res) {
     const Token = await new SignJWT(payload)
         .setProtectedHeader({ alg:'HS256'})
         .setIssuedAt()
-        .setIssuer('http://localhost:3000')
+        .setIssuer('https://next-secure.vercel.app')
         .setExpirationTime('30d')
         .sign(key)
     const reqHeaders = req.headers;
