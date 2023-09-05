@@ -1,20 +1,28 @@
 import {VerifyToken} from "@/app/utility/JWTHelper";
+import { useRouter } from "next/navigation";
 import { NextResponse } from "next/server";
 
-export async function CheckCookieAuth(req) {
+export async function CheckCookieAuth(req, res) {
+    const Token = req.cookies.get('Token')
+    const TokenValue= Token['value']
     try {
-        let token = req.cookies.get('token');
-        let payload= await VerifyToken(token['value'])
-        console.log(payload['email'])
-        const requestHeaders = new Headers(req.headers)
-        requestHeaders.set('email', payload['email'])
-        return NextResponse.next({
-            request: {headers: requestHeaders},
-        })
-    }
-    catch (e) {
-        return NextResponse.redirect(new URL('/login', req.url))
-    }
+    let payload= await VerifyToken(TokenValue)
+    return NextResponse.json({msg:'success'})
+} catch (error) {
+    NextResponse.json({msg:'Fail to access Protected Route',message:"Unauthorized", error: error},{status:401})
+}
+
+
+
+        // let token = req.cookies.get('Token');
+      
+        // const requestHeaders = new Headers(req.headers)
+        // requestHeaders.set('email', payload['email'])
+        // return NextResponse.next({
+        //     request: {headers: requestHeaders},
+        // })
+    
+
 
 
 

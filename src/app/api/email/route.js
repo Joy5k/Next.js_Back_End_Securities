@@ -20,7 +20,7 @@ const transporter = nodemailer.createTransport({
 });
     let myEmail = {
         from: 'Test email from nextJS application <info@teamrabbil.com>',
-        to:'mmehedihasanjoyv@gmail.com',
+        to:ToEmail,
         subject: " nextJS application.The Email sending by Joy",
         text:`Test email from nextJS application.Your verification token is :- ${Token.value} . `
     }

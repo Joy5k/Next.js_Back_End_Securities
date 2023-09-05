@@ -1,9 +1,11 @@
 
 import { NextResponse } from "next/server"
 import { SignJWT, jwtVerify } from "jose"
+import { GET, VerifyToken } from "./app/api/Profile/route";
+import { CheckCookieAuth } from "./app/utility/MiddlewareUtility";
+import { redirect, useRouter } from "next/navigation";
 
 export async function middleware(req, res, next) {
-
   //setting the user's secrete token in headers
   if (req.nextUrl.pathname.startsWith('/api/Token')) {
     const key = new TextEncoder().encode(process.env.JWT_SECRET)
@@ -29,24 +31,17 @@ return NextResponse.next()
   }
 
   //verifying user token and checking the valid user
-    if (req.nextUrl.pathname.startsWith('/api/Profile')) {
-    
-        try {
-            console.log('middleware trying to access /api/Profile');
-            const requestHeaders = new Headers(req.headers);
-          const Token=requestHeaders.get('Token');
-            const key = new TextEncoder().encode(process.env.JWT_SECRET)
-            console.log('middleware 2nd',Token);
-          const decoded = await jwtVerify(Token, key)
-          console.log(decoded,'------------the user------------');
-           return NextResponse.next()
-        } catch (error) {
-
-         return NextResponse.json({status:'fail',message:'Invalid User',error:error})
-        
+  if (req.nextUrl.pathname.startsWith('/protectedRoute')) {
+    const getResult = await CheckCookieAuth(req,res)    
+    if (getResult?.ok === true) {
+      return NextResponse.next()
+    }
+    else {
+      return NextResponse.redirect(new URL('/login', req.url))
+    }
+         
         }
 
-    }
   
   return  NextResponse.next();
 }

@@ -1,10 +1,13 @@
 'use client'
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 const Page = () => {
+  const router=useRouter()
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [Token,setToken]=useState('')
+  const [Token, setToken] = useState('')
+  const [loading,setLoading] = useState(false)
   const handleLogin = async (event) => {
     event.preventDefault();
 
@@ -15,30 +18,34 @@ const Page = () => {
     };
 
     try {
+      setLoading(true);
       const res = await fetch('/api/Token', {
         method: 'POST', // Use POST instead of GET
-        body: JSON.stringify(data),
         headers: {
           'Content-Type': 'application/json',
-          'email':email
+          email:email
         },
       });
 
       if (res.ok) {
         const json = await res.json();
-        console.log(json,'the token');
         setToken(json.Token)
-        document.cookie = 'Token =' +json.Token;
+        document.cookie = 'Token =' + json.Token;
         const response = await fetch(`/api/email?email=${email}`, {
           method: "POST",
           //secret Token setting in the headers 
           headers:{Token: JSON.stringify(Token)}
     })
     const result= await response.json()
-        console.log(result,'--the result--from the login.page');
+        console.log(result, '--the result--from the login.page');
+        if (result.message === 'Success') {
+          setLoading(false)
+              router.replace('/protectedRoute')
+        }
       }
       else {
-        console.error('Failed to fetch data');
+        console.error('Failed to fetch data',res);
+        setLoading(false)
       }
     } catch (error) {
       console.log('Error:', error);
@@ -79,13 +86,17 @@ const Page = () => {
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
-              <div className="form-control mt-6">
-                <button type='submit' className="btn btn-primary">Login</button>
+                <div className="form-control mt-6">
+                  {loading ?
+                    <button type='submit' className="btn btn-primary"><span className="loading loading-dots loading-lg text-center my-auto mx-auto"></span></button> :  <button type='submit' className="btn btn-primary">Login</button>}
+              
+               
               </div>
             </div>
           </div>
         </div>
-      </form>
+        </form>
+    
     </div>
   );
 };

@@ -15,7 +15,7 @@ export async function POST(req, res) {
         .setIssuer('http://localhost:3000')
         .setExpirationTime('2h')
         .sign(key)
-    return NextResponse.json({status:'success',message:'login successful',token:token})
+    return NextResponse.json({status:true,message:'login successful',token:token})
     }
     else {
         return NextResponse.json({status:'fail',message:'login fail'})

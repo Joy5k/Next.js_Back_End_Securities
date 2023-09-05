@@ -5,8 +5,10 @@ import { serialize, parse } from 'cookie';
 
 export async function POST(req, res) {
     const key = new TextEncoder().encode(process.env.JWT_SECRET)
+    const body = req.body;
     const getEmail = req.headers;
     const email=getEmail.get('email');
+    console.log(email,'body');
     const payload = { email:email, user_id: 'Abc123' }
     const Token = await new SignJWT(payload)
         .setProtectedHeader({ alg:'HS256'})
@@ -16,15 +18,20 @@ export async function POST(req, res) {
         .sign(key)
     const reqHeaders = req.headers;
     const setHeaders = await reqHeaders.set('Token', Token)
-
-    console.log(Token,'----------Created the token-----------');
+    const setCookies=req.cookies.set('Token', Token)
     return NextResponse.json({ Token: Token });
 }
 export async function GET(req, res) {
     const JSONBody =await req.json();
-    const Token = JSONBody['token']
+    const Token = JSONBody['Token']
     const key = new TextEncoder().encode(process.env.JWT_SECRET)
     const decoded = await jwtVerify(Token, key)
     return NextResponse.json(decoded)
+    
+}
+export async function VerifyToken(Token) {
+    const secret = new TextEncoder().encode(process.env.JWT_SECRET)
+    const decoded = await jwtVerify(Token, secret)
+    return decoded['payload']
     
 }
