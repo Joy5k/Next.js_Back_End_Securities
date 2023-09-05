@@ -38,6 +38,7 @@ const Page = () => {
     })
     const result= await response.json()
         console.log(result, '--the result--from the login.page');
+        
         if (result.message === 'Success') {
           setLoading(false)
               router.replace('/protectedRoute')

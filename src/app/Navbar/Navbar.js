@@ -15,7 +15,7 @@ const Navbar = () => {
         <li><Link href='/login'>Login</Link></li>
       </ul>
     </div>
-    <a className="btn btn-ghost normal-case text-xl">Next-Secure</a>
+    <Link href='/' className="btn btn-ghost normal-case text-xl">Next-Secure</Link>
   </div>
   <div className="navbar-center hidden lg:flex">
     <ul className="menu menu-horizontal px-1">
@@ -24,7 +24,7 @@ const Navbar = () => {
     </ul>
   </div>
   <div className="navbar-end">
-    <a className="btn">Profile</a>
+    <Link href='/protectedRoute' className="btn">Profile</Link>
   </div>
 </div>
         </div>
